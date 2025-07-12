@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# CONFIG
+read -p "Disk (e.g. nvme0n1,sda): " DISK
+read -p "EFI Partition (default: ${DISK}p1): " EFI
+EFI=${EFI:-${DISK}p1}
+read -p "Root Partition (default: ${DISK}p2): " ROOT
+ROOT=${ROOT:-${DISK}p2}
+read -s -p "LUKS Password: " CRYPTPASS; echo
+
+
+# Partition
+sgdisk -Z /dev/$DISK
+sgdisk -n1:0:+512M -t1:ef00 /dev/$DISK
+sgdisk -n2:0:0     -t2:8300 /dev/$DISK
+
+# Encrypt
+echo "$CRYPTPASS" | cryptsetup luksFormat --type luks1 /dev/$ROOT -
+echo "$CRYPTPASS" | cryptsetup open /dev/$ROOT cryptroot -
+
+# Format
+mkfs.fat -F32 /dev/$EFI
+mkfs.ext4 /dev/mapper/cryptroot
+
+# Mount
+mount /dev/mapper/cryptroot /mnt
+mkdir -p /mnt/boot
+mount /dev/$EFI /mnt/boot
+
+# Install
+pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr sudo zsh 
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# Copy chroot script
+curl -L https://domain.com/chrootcrypt.sh -o /mnt/chrootcrypt.sh
+chmod +x /mnt/chrootcrypt.sh
+
+# Execute chroot script
+arch-chroot /mnt ./chrootcrypt.sh
+umount -R /mnt
+cryptsetup close cryptroot
+echo "Installation DONE. Reboot."
