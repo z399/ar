@@ -31,6 +31,8 @@ mount /dev/$EFI /mnt/boot
 CPU=$(lscpu | grep "Model name")
 [[ "$CPU" == *Intel* ]] && UC="intel-ucode" || UC="amd-ucode"
 
+pacman-key --init
+pacman-key --populate archlinux
 pacman -Sy --noconfirm archlinux-keyring
 pacstrap -K /mnt base base-devel linux-lts linux-firmware $UC nvim grub efibootmgr zsh 
 genfstab -U /mnt >> /mnt/etc/fstab
