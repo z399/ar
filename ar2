@@ -35,7 +35,7 @@ if [[ "$SWAPFILE_YN" =~ ^[Yy]$ ]]; then
   echo "/swapfile none swap defaults,pri=10 0 0" >> /etc/fstab
 fi
 
-# ─── Kernel + GRUB Config (unchanged) ───
+# ─── Kernel + GRUB Config ───
 sed -i 's/HOOKS=(.*)/HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
 mkinitcpio -P
 
