@@ -3,6 +3,7 @@
 read -p "Hostname: " HOST
 read -p "Username: " USER
 read -p "TimeZone (e.g. UTC): " TZ
+lsblk
 read -p "Root Partition (e.g. sda2, nvme2): " LUKS_PART
 read -p "Create fallback swapfile? [y/N]: " SWAPFILE_YN
 read -p "Swapfile size in GB (if enabled): " SWAPSIZE
