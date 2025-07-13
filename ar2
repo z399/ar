@@ -37,7 +37,7 @@ if [[ "$SWAPFILE_YN" =~ ^[Yy]$ ]]; then
 fi
 
 # ─── Kernel + GRUB Config ───
-sed -i 's/HOOKS=(.*)/HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
+sed -i 's/\(^HOOKS=.*\)filesystems\(.*$\)/\1encrypt filesystems\2/' /etc/mkinitcpio.conf
 mkinitcpio -p linux-lts
 
 read -p "GRUB username: " GRUBUSER
