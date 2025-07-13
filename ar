@@ -2,17 +2,15 @@
 
 # CONFIG
 read -p "Disk (e.g. nvme0n1,sda): " DISK
-read -p "EFI Partition (default: ${DISK}p1): " EFI
-EFI=${EFI:-${DISK}p1}
-read -p "Root Partition (default: ${DISK}p2): " ROOT
-ROOT=${ROOT:-${DISK}p2}
+read -p "EFI Partition (sda1, nvme0n1p1): " EFI
+read -p "Root Partition (sda2,nvme0n1p2): " ROOT
 read -s -p "LUKS Password: " CRYPTPASS; echo
 
 
 # Partition
 sgdisk -Z /dev/$DISK
-sgdisk -n1:0:+512M -t1:ef00 /dev/$DISK
-sgdisk -n2:0:0     -t2:8300 /dev/$DISK
+sgdisk -n1:0:+512M -t1:ef00 /dev/$EFI
+sgdisk -n2:0:0     -t2:8300 /dev/$ROOT
 
 # Encrypt
 echo "$CRYPTPASS" | cryptsetup luksFormat --type luks1 /dev/$ROOT -
