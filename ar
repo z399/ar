@@ -3,7 +3,12 @@
 # CONFIG
 lsblk
 read -p "Disk (e.g. nvme0n1,sda): " DISK
-read -s -p "LUKS Password: " CRYPTPASS; echo
+while :; do
+  read -s -p "LUKS Password: " P; echo
+  read -s -p "Confirm: " C; echo
+  [ "$P" = "$C" ] && break || echo "Mismatch" >&2
+done
+CRYPTPASS="$P"
 
 
 # Partition
