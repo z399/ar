@@ -31,7 +31,7 @@ CPU=$(lscpu | grep "Model name")
 [[ "$CPU" == *Intel* ]] && UC="intel-ucode" || UC="amd-ucode"
 
 pacman -Sy --noconfirm archlinux-keyring
-pacstrap -K /mnt base base-devel linux linux-firmware $UC nvim grub efibootmgr zsh 
+pacstrap -K /mnt base base-devel linux-lts linux-firmware $UC nvim grub efibootmgr zsh 
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Copy chroot script
