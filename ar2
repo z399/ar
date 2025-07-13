@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 read -p "Hostname: " HOST
 read -p "Username: " USER
