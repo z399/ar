@@ -27,10 +27,15 @@ mkdir -p /mnt/boot
 mount /dev/$EFI /mnt/boot
 
 # Install
-pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr sudo zsh 
+CPU=$(lscpu | grep "Model name")
+[[ "$CPU" == *Intel* ]] && UC="intel-ucode" || UC="amd-ucode"
+
+pacman -Sy --noconfirm archlinux-keyring
+pacstrap -K /mnt base base-devel linux linux-firmware $UC nvim grub efibootmgr zsh 
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Copy chroot script
+curl -LO https://raw.githubusercontent.com/z399/ar/main/ar2
 cp ar2 /mnt/ar2 
 chmod +x /mnt/ar2 
 arch-chroot /mnt bash ar2 && rm /mnt/ar2
