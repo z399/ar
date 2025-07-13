@@ -46,6 +46,8 @@ echo
 HASH=$(echo -e "$GRUBPASS\n$GRUBPASS" | grub-mkpasswd-pbkdf2 | grep "grub.pbkdf2" | awk '{print $NF}')
 echo "set superusers=\"$GRUBUSER\"" >> /etc/grub.d/40_custom
 echo "password_pbkdf2 $GRUBUSER $HASH" >> /etc/grub.d/40_custom
+sed -i '/menuentry / s/^/--unrestricted /' /etc/grub.d/10_linux
+
 
 UUID=$(blkid -s UUID -o value /dev/$LUKS_PART)
 sed -i "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=$UUID:cryptroot root=/dev/mapper/cryptroot\"|" /etc/default/grub
