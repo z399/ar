@@ -60,4 +60,4 @@ passwd $USER
 
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 systemctl enable NetworkManager
-e
+exit
