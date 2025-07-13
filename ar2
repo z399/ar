@@ -3,7 +3,7 @@
 read -p "Hostname: " HOST
 read -p "Username: " USER
 read -p "TimeZone (e.g. UTC): " TZ
-read -p "Root Partition (e.g. sda2): " LUKS_PART
+read -p "Root Partition (e.g. sda2, nvme2): " LUKS_PART
 read -p "Create fallback swapfile? [y/N]: " SWAPFILE_YN
 read -p "Swapfile size in GB (if enabled): " SWAPSIZE
 
@@ -37,7 +37,7 @@ fi
 
 # ─── Kernel + GRUB Config ───
 sed -i 's/HOOKS=(.*)/HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)/' /etc/mkinitcpio.conf
-mkinitcpio -P
+mkinitcpio -p linux-lts
 
 read -p "GRUB username: " GRUBUSER
 read -s -p "GRUB password: " GRUBPASS
