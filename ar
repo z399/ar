@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # CONFIG
+lsblk
 read -p "Disk (e.g. nvme0n1,sda): " DISK
 read -p "EFI Partition (sda1, nvme0n1p1): " EFI
 read -p "Root Partition (sda2,nvme0n1p2): " ROOT
@@ -30,11 +31,11 @@ pacstrap -K /mnt base base-devel linux linux-firmware grub efibootmgr sudo zsh
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Copy chroot script
-curl -L https://domain.com/chrootcrypt.sh -o /mnt/chrootcrypt.sh
-chmod +x /mnt/chrootcrypt.sh
+cp ar2 /mnt/ar2 
+chmod +x /mnt/ar2 
+arch-chroot /mnt bash ar2 && rm /mnt/ar2
 
-# Execute chroot script
-arch-chroot /mnt ./chrootcrypt.sh
+# Exit
 umount -R /mnt
 cryptsetup close cryptroot
 echo "Installation DONE. Reboot."
