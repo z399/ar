@@ -14,7 +14,9 @@ CRYPTPASS="$P"
 # Partition
 sgdisk -Z /dev/$DISK
 sgdisk -n1:0:+512M -t1:ef00 /dev/$DISK
-sgdisk -n2:0:0     -t2:8300 /dev/$DISK
+sgdisk -n2:0:0     -t2:8309 /dev/$DISK
+partprobe /dev/$DISK
+udevadm settle
 lsblk /dev/$DISK
 read -p "EFI Partition (sda1, nvme0n1p1): " EFI
 read -p "Root Partition (sda2,nvme0n1p2): " ROOT
