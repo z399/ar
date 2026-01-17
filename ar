@@ -41,7 +41,7 @@ CPU=$(lscpu | grep "Model name")
 pacman-key --init
 pacman-key --populate archlinux
 pacman -Sy --noconfirm archlinux-keyring
-pacstrap -K /mnt base base-devel linux-lts linux-firmware $UC nvim efibootmgr zsh networkmanager
+pacstrap -K /mnt base base-devel linux-lts linux-firmware $UC nvim grub efibootmgr zsh networkmanager
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Copy chroot script
